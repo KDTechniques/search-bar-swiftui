@@ -5,20 +5,21 @@ import PackageDescription
 
 let package = Package(
     name: "search-bar-swiftui",
+    platforms: [.iOS(.v17)],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "search-bar-swiftui",
-            targets: ["search-bar-swiftui"]),
+            name: "SearchBarSwiftUI",
+            targets: ["SearchBarSwiftUI"]),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "search-bar-swiftui"),
+            name: "SearchBarSwiftUI",
+            path: "Sources/Search Bar"
+        ),
         .testTarget(
-            name: "search-bar-swiftuiTests",
-            dependencies: ["search-bar-swiftui"]
+            name: "SearchBarTests",
+            dependencies: ["SearchBarSwiftUI"],
+            path: "Tests/Search Bar Tests"
         ),
     ]
 )
