@@ -2,7 +2,7 @@
 
 `search-bar-swiftui` is a customizable SwiftUI search bar component package that mimics Apple's native search interface. It is specifically designed to work seamlessly within SwiftUI sheets, navigation views, and custom contexts, addressing the limitations of the native search bar in these contexts.
 
-## Features ✨
+## ✨ Features
 
 - **Customizable Search Bar**: Configure the placeholder text and bind the search bar's text to a variable.
 - **SwiftUI Compatibility**: Fully integrates with SwiftUI sheets, navigation views, and custom contexts, ensuring smooth operation in modals, overlays, and navigation stacks.
@@ -13,7 +13,7 @@
 ### Comparison between Native Search Interface vs Search Bar SwiftUI 💁🏻‍♂️
 <img src='https://github.com/KDTechniques/search-bar-swiftui/blob/main/readme_images/Comparison.gif?raw=true'>
 
-## Installation 🛠️
+## 🛠️ Installation
 
 ### Swift Package Manager
 
@@ -24,14 +24,14 @@ dependencies: [
     .package(url: "https://github.com/KDTechniques/search-bar-swiftui.git", from: "1.0.0")
 ]
 ```
-### CocoaPods
+### 🫛 CocoaPods
 For CocoaPods, add the following to your Podfile:
 
 ```ruby
 pod 'search-bar-swiftui', :git => '[https://github.com/KDTechniques/search-bar-swiftui.git](https://github.com/KDTechniques/search-bar-swiftui.git)'
 ```
 
-## Usage 📖
+## 📖 Usage
 Here’s how you can use the `SearchBarView` in your SwiftUI project: create an instance of `SearchBarView` and provide necessary parameters:
 
 ### 1. `context: .sheet` (default context)
@@ -130,8 +130,8 @@ struct ContentView: View {
 }
 ```
 
-## Contribution 🤝
+## 🤝 Contribution
 Contributions are welcome! If you have suggestions or improvements, please submit a pull request or open an issue on GitHub.
 
-## License 📜
+## 📜 License
 search-bar-swiftui is released under the MIT License. See the [LICENSE](https://github.com/KDTechniques/search-bar-swiftui/blob/main/LICENSE) file for details.
