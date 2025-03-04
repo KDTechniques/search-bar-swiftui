@@ -11,9 +11,16 @@ public struct SearchBarView: View {
     // MARK: - PROPERTIES
     @Binding var searchBarText: String
     let placeholder: String
+    let onFocus: (() -> Void)?
     
     // MARK: - PRIVATE PROPERTIES
-    @FocusState private var isFocused: Bool
+    @FocusState private var isFocused: Bool {
+        didSet {
+            if isFocused {
+                onFocus?()
+            }
+        }
+    }
     @State private var vm: SearchBarViewModel
     
     // MARK: - INITIALIZER
@@ -21,10 +28,12 @@ public struct SearchBarView: View {
         searchBarText: Binding<String>,
         placeholder: String,
         context: ContextTypes,
-        customColors: ColorContext?
+        customColors: ColorContext?,
+        onFocus: (() -> Void)? = nil
     ) {
         _searchBarText = searchBarText
         self.placeholder = placeholder
+        self.onFocus = onFocus
         
         var colors: ColorContext {
             switch context {
