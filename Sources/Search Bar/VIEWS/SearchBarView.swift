@@ -13,8 +13,9 @@ public struct SearchBarView: View {
     let placeholder: String
     
     // MARK: - PRIVATE PROPERTIES
-    @FocusState.Binding var isFocused: Bool
+    @FocusState private var isFocused: Bool
     @State private var vm: SearchBarViewModel
+    let action: (Bool) -> Void
     
     // MARK: - INITIALIZER
     public init(
@@ -22,7 +23,7 @@ public struct SearchBarView: View {
         placeholder: String,
         context: ContextTypes,
         customColors: ColorContext?,
-        isFocused: FocusState<Bool>.Binding
+        action: @escaping (_ isFocused: Bool) -> Void
     ) {
         _searchBarText = searchBarText
         self.placeholder = placeholder
@@ -36,7 +37,7 @@ public struct SearchBarView: View {
         }
         
         _vm = .init(initialValue: .init(colors: colors))
-        _isFocused = isFocused
+        self.action = action
     }
     
     // MARK: - BODY
@@ -60,13 +61,13 @@ public struct SearchBarView: View {
         .overlay(alignment: .trailing) { trailingOverlay_3 }
         .padding(.trailing, vm.searchBarTrailingPadding)
         .environment(vm)
+        .onChange(of: isFocused) { action($1) }
     }
 }
 
 // MARK: - PREVIEWS
 #Preview("SearchBarView - .sheet") {
     @Previewable @State var text: String = ""
-    @FocusState var isFocused: Bool
     
     Color.clear
         .sheet(isPresented: .constant(true)) {
@@ -76,9 +77,10 @@ public struct SearchBarView: View {
                         searchBarText: $text,
                         placeholder: "Search",
                         context: .sheet,
-                        customColors: nil,
-                        isFocused: $isFocused
-                    )
+                        customColors: nil
+                    ) { isFocused in
+                        print("isFocused: \(isFocused)")
+                    }
                     .padding(.top, 20)
                     
                     Spacer()
@@ -91,7 +93,6 @@ public struct SearchBarView: View {
 
 #Preview("SearchBarView - .navigation") {
     @Previewable @State var text: String = ""
-    @FocusState var isFocused: Bool
     
     NavigationStack {
         VStack {
@@ -99,9 +100,10 @@ public struct SearchBarView: View {
                 searchBarText: $text,
                 placeholder: "Search",
                 context: .navigation,
-                customColors: nil,
-                isFocused: $isFocused
-            )
+                customColors: nil
+            ) { isFocused in
+                print("isFocused: \(isFocused)")
+            }
             .padding(.top, 20)
             
             Spacer()
@@ -112,7 +114,6 @@ public struct SearchBarView: View {
 
 #Preview("SearchBarView - .custom") {
     @Previewable @State var text: String = ""
-    @FocusState var isFocused: Bool
     
     NavigationStack {
         VStack {
@@ -125,9 +126,10 @@ public struct SearchBarView: View {
                     searchIconTextColor: .blue,
                     placeholderTextColor: .green,
                     textColor: .red
-                ),
-                isFocused: $isFocused
-            )
+                )
+            ) { isFocused in
+                print("isFocused: \(isFocused)")
+            }
             .tint(.purple)
             .padding(.top, 20)
             
