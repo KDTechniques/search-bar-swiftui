@@ -46,12 +46,13 @@ import SearchBarSwiftUI
 
 struct ContentView: View {
     @State private var text: String = ""
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         Color.clear
             .sheet(isPresented: .constant(true)) {
                 VStack {
-                    SearchBarView(searchBarText: $text, placeholder: "Search", context: .sheet, customColors: nil)
+                    SearchBarView(searchBarText: $text, placeholder: "Search", context: .sheet, customColors: nil, isFocused: $isFocused)
                         .padding(.top, 20)
                     
                     Spacer()
@@ -76,6 +77,7 @@ import SearchBarSwiftUI
 
 struct ContentView: View {
     @State private var text: String = ""
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         VStack {
@@ -83,7 +85,8 @@ struct ContentView: View {
                 searchBarText: $text,
                 placeholder: "Search",
                 context: .navigation,
-                customColors: nil
+                customColors: nil,
+                isFocused: $isFocused
             )
             .padding(.top, 20)
             
@@ -107,6 +110,7 @@ import SearchBarSwiftUI
 
 struct ContentView: View {
     @State private var text: String = ""
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         VStack {
@@ -119,7 +123,8 @@ struct ContentView: View {
                     searchIconTextColor: .blue,
                     placeholderTextColor: .green,
                     textColor: .red
-                )
+                ),
+                isFocused: $isFocused
             )
             .tint(.purple)
             .padding(.top, 20)
