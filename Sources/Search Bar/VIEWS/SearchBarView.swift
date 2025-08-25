@@ -15,15 +15,13 @@ public struct SearchBarView: View {
     // MARK: - PRIVATE PROPERTIES
     @FocusState private var isFocused: Bool
     @State private var vm: SearchBarViewModel
-    let action: (Bool) -> Void
     
     // MARK: - INITIALIZER
     public init(
         searchBarText: Binding<String>,
         placeholder: String,
         context: ContextTypes,
-        customColors: ColorContext?,
-        action: @escaping (_ isFocused: Bool) -> Void
+        customColors: ColorContext?
     ) {
         _searchBarText = searchBarText
         self.placeholder = placeholder
@@ -37,7 +35,6 @@ public struct SearchBarView: View {
         }
         
         _vm = .init(initialValue: .init(colors: colors))
-        self.action = action
     }
     
     // MARK: - BODY
@@ -61,7 +58,6 @@ public struct SearchBarView: View {
         .overlay(alignment: .trailing) { trailingOverlay_3 }
         .padding(.trailing, vm.searchBarTrailingPadding)
         .environment(vm)
-        .onChange(of: isFocused) { action($1) }
     }
 }
 
@@ -78,9 +74,7 @@ public struct SearchBarView: View {
                         placeholder: "Search",
                         context: .sheet,
                         customColors: nil
-                    ) { isFocused in
-                        print("isFocused: \(isFocused)")
-                    }
+                    )
                     .padding(.top, 20)
                     
                     Spacer()
@@ -101,9 +95,7 @@ public struct SearchBarView: View {
                 placeholder: "Search",
                 context: .navigation,
                 customColors: nil
-            ) { isFocused in
-                print("isFocused: \(isFocused)")
-            }
+            )
             .padding(.top, 20)
             
             Spacer()
@@ -127,9 +119,7 @@ public struct SearchBarView: View {
                     placeholderTextColor: .green,
                     textColor: .red
                 )
-            ) { isFocused in
-                print("isFocused: \(isFocused)")
-            }
+            )
             .tint(.purple)
             .padding(.top, 20)
             
