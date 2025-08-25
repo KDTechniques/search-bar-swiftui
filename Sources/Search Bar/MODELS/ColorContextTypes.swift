@@ -24,7 +24,7 @@ public enum ColorContextTypes {
     )
 }
 
-public struct ColorContext {
+public struct ColorContext: Hashable {
     // MARK: - PROPERTIES
     let backgroundColor: Color
     let searchIconTextColor: Color

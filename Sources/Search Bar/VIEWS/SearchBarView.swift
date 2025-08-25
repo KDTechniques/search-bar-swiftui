@@ -8,11 +8,13 @@
 import SwiftUI
 
 public struct SearchBarView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INJECTED PROPERTIES
     @Binding var searchBarText: String
-    let placeholder: String
+    private let placeholder: String
+    private let context: ContextTypes
+    private let isSearching: Bool
     
-    // MARK: - PRIVATE PROPERTIES
+    // MARK: - ASSIGNED PROPERTIES
     @FocusState private var isFocused: Bool
     @State private var vm: SearchBarViewModel
     
@@ -21,32 +23,20 @@ public struct SearchBarView: View {
         searchBarText: Binding<String>,
         placeholder: String,
         context: ContextTypes,
-        customColors: ColorContext?
+        isSearching: Bool = false
     ) {
+        _vm = .init(initialValue: .init(context: context))
         _searchBarText = searchBarText
         self.placeholder = placeholder
-        
-        var colors: ColorContext {
-            switch context {
-            case .sheet: ColorContextTypes.sheet
-            case .navigation: ColorContextTypes.navigation
-            case .custom: customColors ?? ColorContextTypes.navigation
-            }
-        }
-        
-        _vm = .init(initialValue: .init(colors: colors))
+        self.context = context
+        self.isSearching = isSearching
     }
     
     // MARK: - BODY
     public var body: some View {
         HStack(spacing: 0) {
-            SearchBar_SearchIconView()
-            
-            SearchBar_TextFieldView(
-                text: $searchBarText,
-                isFocused: $isFocused,
-                placeholder: placeholder
-            )
+            SearchIconView()
+            TextFieldView(isFocused: $isFocused, placeholder: placeholder)
         }
         .padding(.horizontal, 6)
         .padding(.vertical, 7)
@@ -58,6 +48,9 @@ public struct SearchBarView: View {
         .overlay(alignment: .trailing) { trailingOverlay_3 }
         .padding(.trailing, vm.searchBarTrailingPadding)
         .environment(vm)
+        .onChange(of: searchBarText) { vm.setSearchText($1) }
+        .onChange(of: isSearching) { vm.setIsSearching($1) }
+        .onChange(of: context) { vm.setColors(context: $1) }
     }
 }
 
@@ -72,8 +65,7 @@ public struct SearchBarView: View {
                     SearchBarView(
                         searchBarText: $text,
                         placeholder: "Search",
-                        context: .sheet,
-                        customColors: nil
+                        context: .sheet
                     )
                     .padding(.top, 20)
                     
@@ -93,8 +85,7 @@ public struct SearchBarView: View {
             SearchBarView(
                 searchBarText: $text,
                 placeholder: "Search",
-                context: .navigation,
-                customColors: nil
+                context: .navigation
             )
             .padding(.top, 20)
             
@@ -112,13 +103,12 @@ public struct SearchBarView: View {
             SearchBarView(
                 searchBarText: $text,
                 placeholder: "Search",
-                context: .custom,
-                customColors: .init(
+                context: .custom(.init(
                     backgroundColor: .yellow,
                     searchIconTextColor: .blue,
                     placeholderTextColor: .green,
                     textColor: .red
-                )
+                ))
             )
             .tint(.purple)
             .padding(.top, 20)
@@ -133,20 +123,18 @@ public struct SearchBarView: View {
 extension SearchBarView {
     // MARK: - trailingOverlay_1
     private var trailingOverlay_1: some View {
-        SearchBar_TrailingFadeEffectView(isFocused: $isFocused)
+        TrailingFadeEffectView(isFocused: $isFocused)
     }
     
     // MARK: - trailingOverlay_2
+    @ViewBuilder
     private var trailingOverlay_2: some View {
-        SearchBar_XButtonView(text: $searchBarText, isFocused: $isFocused)
+        CircularProgressView()
+        XButtonView(isFocused: $isFocused)
     }
     
     // MARK: - trailingOverlay_3
     private var trailingOverlay_3: some View {
-        SearchBar_CancelButtonView(
-            text: $searchBarText,
-            isFocused: $isFocused,
-            vm: vm
-        )
+        CancelButtonView(isFocused: $isFocused)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  SearchBar_TrailingFadeEffectView.swift
+//  TrailingFadeEffectView.swift
 //  search-bar-swiftui
 //
 //  Created by Mr. Kavinda Dilshan on 2024-07-31.
@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct SearchBar_TrailingFadeEffectView: View {
-    // MARK: PROPERTIES
+struct TrailingFadeEffectView: View {
+    // MARK: INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
     
+    // MARK: - ASSIGNED PROPERTIES
     @FocusState.Binding var isFocused: Bool
     
     // MARK: - BODY
@@ -27,10 +28,10 @@ struct SearchBar_TrailingFadeEffectView: View {
 }
 
 // MARK: - PREVEIWS
-#Preview("SearchBar_TrailingFadeEffectView") {
+#Preview("TrailingFadeEffectView") {
     @Previewable @FocusState var isFocused: Bool
-    SearchBar_TrailingFadeEffectView(isFocused: $isFocused)
-        .environment(SearchBarViewModel(colors: ColorContextTypes.sheet))
+    TrailingFadeEffectView(isFocused: $isFocused)
+        .environment(SearchBarViewModel(context: .sheet))
 }
 
 // MARK: - SUBVIEWS
