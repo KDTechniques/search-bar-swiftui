@@ -7,8 +7,8 @@
 
 import Foundation
 
-public enum ContextTypes {
+public enum ContextTypes: Hashable {
     case sheet // Default context
     case navigation // For navigation views
-    case custom // User define context
+    case custom(ColorContext) // User define context
 }

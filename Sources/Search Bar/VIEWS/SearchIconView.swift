@@ -1,5 +1,5 @@
 //
-//  SearchBar_SearchIconView.swift
+//  SearchIconView.swift
 //  search-bar-swiftui
 //
 //  Created by Mr. Kavinda Dilshan on 2024-07-31.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct SearchBar_SearchIconView: View {
-    // MARK: - PROPERTIES
+struct SearchIconView: View {
+    // MARK: - INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
     
     // MARK: - BODY
@@ -19,7 +19,7 @@ struct SearchBar_SearchIconView: View {
 }
 
 // MARK: - PREVIEWS
-#Preview("SearchBar_SearchIconView") {
-    SearchBar_SearchIconView()
-        .environment(SearchBarViewModel(colors: ColorContextTypes.sheet))
+#Preview("SearchIconView") {
+    SearchIconView()
+        .environment(SearchBarViewModel(context: .sheet))
 }
