@@ -57,6 +57,10 @@ struct ContentView: View {
                 VStack {
                     SearchBarView(searchBarText: $searchText, placeholder: "Search", context: .sheet, isSearching: isSearching)
                         .padding(.top, 20)
+                        .focused($isFocused)
+                        .onChange(of: isFocused) { oldValue, newValue in
+                            // Do something here based on Focus State changes
+                        }
                     
                     Spacer()
                 }
@@ -89,6 +93,10 @@ struct ContentView: View {
                 VStack {
                     SearchBarView(searchBarText: $searchText, placeholder: "Search", context: .navigation, isSearching: isSearching)
                         .padding(.top, 20)
+                        .focused($isFocused)
+                        .onChange(of: isFocused) { oldValue, newValue in
+                            // Do something here based on Focus State changes
+                        }
                     
                     Spacer()
                 }
@@ -132,6 +140,10 @@ struct ContentView: View {
                     )
                     .tint(.purple)
                     .padding(.top, 20)
+                    .focused($isFocused)
+                    .onChange(of: isFocused) { oldValue, newValue in
+                        // Do something here based on Focus State changes
+                    }
                     
                     Spacer()
                 }
