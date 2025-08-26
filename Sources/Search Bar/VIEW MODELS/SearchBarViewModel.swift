@@ -12,18 +12,14 @@ import Combine
 @Observable
 final class SearchBarViewModel {
     // MARK: - INJECTED PROPERTIES
-    var colors: ColorContext
+    var colors: ColorContextModel
     
     // MARK: - ASSIGNED PROPERTIES
     private(set) var searchBarTrailingPadding: CGFloat = 0
     private(set) var cancelButtonOffsetX: CGFloat = 53
     private(set) var cancelButtonOpacity: CGFloat = 0
     
-    private(set) var searchBarAnimation: Bool? {
-        didSet {
-            searchBarAnimation$ = searchBarAnimation
-        }
-    }
+    private(set) var searchBarAnimation: Bool? { didSet { searchBarAnimation$ = searchBarAnimation } }
     @ObservationIgnored @Published private var searchBarAnimation$: Bool?
     
     private var cancelable: Set<AnyCancellable> = []
@@ -32,17 +28,7 @@ final class SearchBarViewModel {
     
     // MARK: - INITIALIZER
     init(context: ContextTypes) {
-        switch context {
-        case .sheet:
-            self.colors = ColorContextTypes.sheet
-            
-        case .navigation:
-            self.colors = ColorContextTypes.navigation
-            
-        case .custom(let colors):
-            self.colors = colors
-        }
-        
+        self.colors = Utilities.setColors(context: context)
         searchBarAnimationSubscriber()
     }
     
@@ -51,29 +37,8 @@ final class SearchBarViewModel {
         searchText = text
     }
     
-    func setColors(context: ContextTypes) {
-        switch context {
-        case .sheet:
-            self.colors = ColorContextTypes.sheet
-            
-        case .navigation:
-            self.colors = ColorContextTypes.navigation
-            
-        case .custom(let colors):
-            self.colors = colors
-        }
-    }
-    
     func setIsSearching(_ value: Bool) {
         isSearching = value
-    }
-    
-    func searchTextBinding() -> Binding<String> {
-        return Binding { [weak self] in
-            self?.searchText ?? ""
-        } set: { [weak self] in
-            self?.setSearchText($0)
-        }
     }
     
     func setCancelButtonOpacity(_ opacity: CGFloat) {
@@ -92,25 +57,41 @@ final class SearchBarViewModel {
         return !condition1 && !condition2
     }
     
+    func showCircularProgress() -> Bool {
+        let condition1: Bool = searchText.isEmpty
+        let condition2: Bool = isSearching
+        
+        return !condition1 && condition2
+    }
+    
+    func handleAnimatedCancelButtonOnSearchTextNFocusChange(isFocused: Bool) {
+        let condition1: Bool = isFocused
+        let condition2: Bool = searchText.isEmpty
+        
+        !condition1 && condition2 ? hideAnimatedCancelButton() : showAnimatedCancelButton()
+    }
+    
     // MARK: - PRIVATE FUNCTIONS
     
     /// Animates the appearance and disappearance of the cancel button
     /// based on the provided text and state parameters.
     private func searchBarAnimation(_ boolean: Bool) {
-        if boolean || !searchText.isEmpty {
-            // Animate to show the cancel button
-            withAnimation(.smooth(duration: 0.3)) {
-                searchBarTrailingPadding = 65
-                cancelButtonOffsetX = 48
-                cancelButtonOpacity = 1
-            }
-        } else {
-            // Animate to hide the cancel button
-            withAnimation(.smooth(duration: 0.3)) {
-                searchBarTrailingPadding = 0
-                cancelButtonOffsetX = 53
-                cancelButtonOpacity = 0
-            }
+        boolean ? showAnimatedCancelButton() : hideAnimatedCancelButton()
+    }
+    
+    private func showAnimatedCancelButton() {
+        withAnimation(.smooth(duration: 0.3)) {
+            searchBarTrailingPadding = 65
+            cancelButtonOffsetX = 48
+            cancelButtonOpacity = 1
+        }
+    }
+    
+    private func hideAnimatedCancelButton() {
+        withAnimation(.smooth(duration: 0.3)) {
+            searchBarTrailingPadding = 0
+            cancelButtonOffsetX = 53
+            cancelButtonOpacity = 0
         }
     }
     

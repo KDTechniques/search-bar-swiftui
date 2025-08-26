@@ -11,7 +11,6 @@ public struct SearchBarView: View {
     // MARK: - INJECTED PROPERTIES
     @Binding var searchBarText: String
     private let placeholder: String
-    private let context: ContextTypes
     private let isSearching: Bool
     
     // MARK: - ASSIGNED PROPERTIES
@@ -28,7 +27,6 @@ public struct SearchBarView: View {
         _vm = .init(initialValue: .init(context: context))
         _searchBarText = searchBarText
         self.placeholder = placeholder
-        self.context = context
         self.isSearching = isSearching
     }
     
@@ -36,7 +34,7 @@ public struct SearchBarView: View {
     public var body: some View {
         HStack(spacing: 0) {
             SearchIconView()
-            TextFieldView(isFocused: $isFocused, placeholder: placeholder)
+            TextFieldView(text: $searchBarText, isFocused: $isFocused, placeholder: placeholder)
         }
         .padding(.horizontal, 6)
         .padding(.vertical, 7)
@@ -48,9 +46,8 @@ public struct SearchBarView: View {
         .overlay(alignment: .trailing) { trailingOverlay_3 }
         .padding(.trailing, vm.searchBarTrailingPadding)
         .environment(vm)
-        .onChange(of: searchBarText) { vm.setSearchText($1) }
+        .onChange(of: searchBarText) { onSearchTextChange($1) }
         .onChange(of: isSearching) { vm.setIsSearching($1) }
-        .onChange(of: context) { vm.setColors(context: $1) }
     }
 }
 
@@ -121,20 +118,25 @@ public struct SearchBarView: View {
 
 // MARK: - EXTENSIONS
 extension SearchBarView {
-    // MARK: - trailingOverlay_1
     private var trailingOverlay_1: some View {
         TrailingFadeEffectView(isFocused: $isFocused)
     }
     
-    // MARK: - trailingOverlay_2
     @ViewBuilder
     private var trailingOverlay_2: some View {
-        CircularProgressView()
-        XButtonView(isFocused: $isFocused)
+        if vm.showXButton() {
+            XButtonView(text: $searchBarText, isFocused: $isFocused)
+        } else if vm.showCircularProgress() {
+            CircularProgressView()
+        }
     }
     
-    // MARK: - trailingOverlay_3
     private var trailingOverlay_3: some View {
-        CancelButtonView(isFocused: $isFocused)
+        CancelButtonView(text: $searchBarText, isFocused: $isFocused)
+    }
+    
+    private func onSearchTextChange(_ value: String) {
+        vm.setSearchText(value)
+        vm.handleAnimatedCancelButtonOnSearchTextNFocusChange(isFocused: isFocused)
     }
 }

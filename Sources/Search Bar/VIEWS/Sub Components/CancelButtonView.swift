@@ -10,10 +10,12 @@ import SwiftUI
 struct CancelButtonView: View {
     // MARK: - INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
+    @Binding var text: String
     @FocusState.Binding var isFocused: Bool
     
     // MARK: - INITIALIZER
-    init(isFocused: FocusState<Bool>.Binding) {
+    init(text: Binding<String>, isFocused: FocusState<Bool>.Binding) {
+        _text = text
         _isFocused = isFocused
     }
     
@@ -34,15 +36,15 @@ struct CancelButtonView: View {
     @Previewable @FocusState var isFocused: Bool
     let vm: SearchBarViewModel = .init(context: .sheet)
     
-    CancelButtonView(isFocused: $isFocused)
+    CancelButtonView(text: .constant(""), isFocused: $isFocused)
         .onAppear { vm.setCancelButtonOpacity(1.0) }
         .environment(vm)
 }
 
 // MARK: - EXTENSIONS
 extension CancelButtonView {
-    // MARK: - handleTap
     private func handleTap() {
+        text = ""
         vm.setSearchText("")
         vm.setSearchBarAnimation(false)
         isFocused = false

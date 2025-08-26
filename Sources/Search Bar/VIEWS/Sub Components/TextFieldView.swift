@@ -10,21 +10,24 @@ import SwiftUI
 struct TextFieldView: View {
     // MARK: - INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
+    @Binding var text: String
     @FocusState.Binding var isFocused: Bool
     let placeholder: String
     
     // MARK: - INITIALIZER
     init(
+        text: Binding<String>,
         isFocused: FocusState<Bool>.Binding,
         placeholder: String
     ) {
+        _text = text
         _isFocused = isFocused
         self.placeholder = placeholder
     }
     
     // MARK: - BODY
     var body: some View {
-        TextField("", text: vm.searchTextBinding()) {
+        TextField("", text: $text) {
             handleOnFocus($0)
         } onCommit: {
             handleOnCommit()
@@ -43,22 +46,19 @@ struct TextFieldView: View {
     @Previewable @FocusState var isFocused: Bool
     
     TextFieldView(
+        text: $text,
         isFocused: $isFocused,
-        placeholder: "Search"
+        placeholder: text.isEmpty ? "Search" : ""
     )
     .previewModifier(context: .sheet)
 }
 
 // MARK: - EXTENSIONS
 extension TextFieldView {
-    // MARK: - FUNCTIONS
-    
-    // MARK: - handleOnFocus
     private func handleOnFocus(_ boolean: Bool) {
         vm.setSearchBarAnimation(boolean)
     }
     
-    // MARK: - handleOnCommit
     private func handleOnCommit() {
         UIApplication.shared
             .sendAction(

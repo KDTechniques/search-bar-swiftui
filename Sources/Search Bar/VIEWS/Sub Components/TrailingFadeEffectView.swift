@@ -30,23 +30,16 @@ struct TrailingFadeEffectView: View {
 // MARK: - PREVEIWS
 #Preview("TrailingFadeEffectView") {
     @Previewable @FocusState var isFocused: Bool
+    
     TrailingFadeEffectView(isFocused: $isFocused)
         .environment(SearchBarViewModel(context: .sheet))
 }
 
 // MARK: - SUBVIEWS
 
-// MARK: - TrailingBackground_1
 fileprivate struct TrailingBackground_1: View {
-    // MARK: - PROPERTIES
     let color: Color
     
-    // MARK: - INITIALIZER
-    init(color: Color) {
-        self.color = color
-    }
-    
-    //  MARK: - BODY
     var body: some View {
         color
             .frame(width: 62)
@@ -54,17 +47,9 @@ fileprivate struct TrailingBackground_1: View {
     }
 }
 
-// MARK: - TrailingBackground_2
 fileprivate struct TrailingBackground_2: View {
-    // MARK: - PROPERTIES
     let color: Color
     
-    // MARK: - INITIALIZER
-    init(color: Color) {
-        self.color = color
-    }
-    
-    //  MARK: - BODY
     var body: some View {
         color.frame(width: 30)
     }

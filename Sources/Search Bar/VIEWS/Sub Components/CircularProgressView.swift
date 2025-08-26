@@ -13,10 +13,14 @@ struct CircularProgressView: View {
     
     // MARK: - BODY
     var body: some View {
-        if vm.isSearching {
-            ProgressView()
-                .scaleEffect(0.8)
-                .padding(.trailing, 6)
-        }
+        ProgressView()
+            .scaleEffect(0.8)
+            .padding(.trailing, 6)
     }
+}
+
+// MARK: - PREVIEWS
+#Preview("CircularProgressView") {
+    CircularProgressView()
+        .previewModifier(context: .sheet)
 }
