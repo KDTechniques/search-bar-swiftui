@@ -29,4 +29,11 @@ public struct ColorContextModel: Hashable {
     let searchIconTextColor: Color
     let placeholderTextColor: Color
     let textColor: Color
+    
+    public init(backgroundColor: Color, searchIconTextColor: Color, placeholderTextColor: Color, textColor: Color) {
+        self.backgroundColor = backgroundColor
+        self.searchIconTextColor = searchIconTextColor
+        self.placeholderTextColor = placeholderTextColor
+        self.textColor = textColor
+    }
 }
