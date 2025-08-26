@@ -9,6 +9,8 @@
 - **Modern Design**: Clean UI with rounded corners, including a search icon, text field, and interactive trailing buttons.
 - **Focus Management**: Handles focus state to provide visual feedback and manage user interactions.
 - **Custom Colors**: Option to provide custom colors for the search bar's background and elements.
+- **Progress Indicator**: Replaces X button with a circular progress. Perfect for showing ongoing async queries or loading states.
+
 
 ### Comparison between Native Search Interface vs Search Bar SwiftUI 💁🏻‍♂️
 <img src='https://github.com/KDTechniques/search-bar-swiftui/blob/main/readme_images/Comparison.gif?raw=true'>
@@ -45,17 +47,16 @@ import SwiftUI
 import SearchBarSwiftUI
 
 struct ContentView: View {
-    @State private var text: String = ""
+    @State private var searchText: String = ""
+    @State private var isSearching: Bool = false
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         Color.clear
             .sheet(isPresented: .constant(true)) {
                 VStack {
-                    SearchBarView(searchBarText: $text, placeholder: "Search", context: .sheet, customColors: nil) { isFocused in
-                        // Do something with `isFocused` boolean value here...
-                        print("isFocused: \(isFocused)")
-                    }
-                    .padding(.top, 20)
+                    SearchBarView(searchBarText: $searchText, placeholder: "Search", context: .sheet, isSearching: isSearching)
+                        .padding(.top, 20)
                     
                     Spacer()
                 }
@@ -78,23 +79,21 @@ import SwiftUI
 import SearchBarSwiftUI
 
 struct ContentView: View {
-    @State private var text: String = ""
+    @State private var searchText: String = ""
+    @State private var isSearching: Bool = false
+    @FocusState private var isFocused: Bool
     
     var body: some View {
-        VStack {
-            SearchBarView(
-                searchBarText: $text,
-                placeholder: "Search",
-                context: .navigation,
-                customColors: nil
-            ) { isFocused in
-                // Do something with `isFocused` boolean value here...
-                print("isFocused: \(isFocused)")
+        Color.clear
+            .sheet(isPresented: .constant(true)) {
+                VStack {
+                    SearchBarView(searchBarText: $searchText, placeholder: "Search", context: .navigation, isSearching: isSearching)
+                        .padding(.top, 20)
+                    
+                    Spacer()
+                }
+                .presentationDragIndicator(.visible)
             }
-            .padding(.top, 20)
-            
-            Spacer()
-        }
     }
 }
 ```
@@ -112,29 +111,32 @@ import SwiftUI
 import SearchBarSwiftUI
 
 struct ContentView: View {
-    @State private var text: String = ""
-
+    @State private var searchText: String = ""
+    @State private var isSearching: Bool = false
+    @FocusState private var isFocused: Bool
+    
     var body: some View {
-        VStack {
-            SearchBarView(
-                searchBarText: $text,
-                placeholder: "Search",
-                context: .custom,
-                customColors: .init(
-                    backgroundColor: .yellow,
-                    searchIconTextColor: .blue,
-                    placeholderTextColor: .green,
-                    textColor: .red
-                )
-            ) { isFocused in
-                // Do something with `isFocused` boolean value here...
-                print("isFocused: \(isFocused)")
-            }
-            .tint(.purple)
-            .padding(.top, 20)
+        Color.clear
+            .sheet(isPresented: .constant(true)) {
+                VStack {
+                    SearchBarView(
+                        searchBarText: $searchText,
+                        placeholder: "Search",
+                        context: .custom(.init(
+                            backgroundColor: .yellow,
+                            searchIconTextColor: .blue,
+                            placeholderTextColor: .green,
+                            textColor: .red
+                        )),
+                        isSearching: isSearching
+                    )
+                    .tint(.purple)
+                    .padding(.top, 20)
                     
-            Spacer()
-        }
+                    Spacer()
+                }
+                .presentationDragIndicator(.visible)
+            }
     }
 }
 ```

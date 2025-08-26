@@ -10,10 +10,12 @@ import SwiftUI
 struct XButtonView: View {
     // MARK: - INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
+    @Binding var text: String
     @FocusState.Binding var isFocused: Bool
     
     // MARK: - INITIALIZER
-    init(isFocused: FocusState<Bool>.Binding) {
+    init(text: Binding<String>, isFocused: FocusState<Bool>.Binding) {
+        _text = text
         _isFocused = isFocused
     }
     
@@ -25,7 +27,6 @@ struct XButtonView: View {
             Image(systemName: "xmark.circle.fill")
                 .symbolRenderingMode(.monochrome)
                 .foregroundStyle(vm.colors.searchIconTextColor)
-                .opacity(vm.showXButton() ? 1 : 0)
                 .padding(.trailing, 6)
                 .animation(.none, value: vm.searchText)
         }
@@ -35,14 +36,15 @@ struct XButtonView: View {
 // MARK: - PREVIEWS
 #Preview("XButtonView") {
     @Previewable @FocusState var isFocused: Bool
-    XButtonView(isFocused: $isFocused)
+    
+    XButtonView(text: .constant(""), isFocused: $isFocused)
         .environment(SearchBarViewModel(context: .sheet))
 }
 
 // MARK: - EXTENSIONS
 extension XButtonView {
-    // MARK: - handleTap
     private func handleTap() {
+        text = ""
         vm.setSearchText("")
         isFocused = true
     }

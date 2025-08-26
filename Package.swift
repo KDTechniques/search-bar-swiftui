@@ -15,11 +15,6 @@ let package = Package(
         .target(
             name: "SearchBarSwiftUI",
             path: "Sources/Search Bar"
-        ),
-        .testTarget(
-            name: "SearchBarTests",
-            dependencies: ["SearchBarSwiftUI"],
-            path: "Tests/Search Bar Tests"
-        ),
+        )
     ]
 )

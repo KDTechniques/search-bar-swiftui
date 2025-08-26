@@ -10,5 +10,5 @@ import Foundation
 public enum ContextTypes: Hashable {
     case sheet // Default context
     case navigation // For navigation views
-    case custom(ColorContext) // User define context
+    case custom(ColorContextModel) // User define context
 }
