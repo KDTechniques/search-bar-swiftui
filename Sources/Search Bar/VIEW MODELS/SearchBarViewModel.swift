@@ -68,7 +68,8 @@ final class SearchBarViewModel {
         let condition1: Bool = isFocused
         let condition2: Bool = searchText.isEmpty
         
-        !condition1 && condition2 ? hideAnimatedCancelButton() : showAnimatedCancelButton()
+        condition1 ? setSearchBarAnimation(true) : setSearchBarAnimation(!condition2)
+        
     }
     
     // MARK: - PRIVATE FUNCTIONS
