@@ -137,6 +137,5 @@ extension SearchBarView {
     
     private func onSearchTextChange(_ value: String) {
         vm.setSearchText(value)
-        vm.handleAnimatedCancelButtonOnSearchTextNFocusChange(isFocused: isFocused)
     }
 }

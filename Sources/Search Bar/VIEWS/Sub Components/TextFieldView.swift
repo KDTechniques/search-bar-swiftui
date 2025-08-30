@@ -56,10 +56,15 @@ struct TextFieldView: View {
 // MARK: - EXTENSIONS
 extension TextFieldView {
     private func handleOnFocus(_ boolean: Bool) {
-        vm.setSearchBarAnimation(boolean)
+        vm.handleAnimatedCancelButtonOnSearchTextNFocusChange(isFocused: boolean)
     }
     
     private func handleOnCommit() {
+        /// On commit, the TextField API automatically sets `isFocused` to false by default,
+        /// so there’s no need to pass `isFocused` here.
+        vm.handleAnimatedCancelButtonOnSearchTextNFocusChange(isFocused: false)
+        
+        // Dismiss the keyboard
         UIApplication.shared
             .sendAction(
                 #selector(UIResponder.resignFirstResponder),

@@ -44,9 +44,8 @@ struct CancelButtonView: View {
 // MARK: - EXTENSIONS
 extension CancelButtonView {
     private func handleTap() {
+        isFocused = false
         text = ""
         vm.setSearchText("")
-        vm.setSearchBarAnimation(false)
-        isFocused = false
     }
 }
