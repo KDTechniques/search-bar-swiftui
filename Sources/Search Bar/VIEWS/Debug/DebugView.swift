@@ -33,7 +33,7 @@ public struct DebugView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.extraLarge)
             
-            Text("isFocused: \(isFocused)")
+            Text("isFocused: \(isFocused.description)")
             
             Text("Search Text: \(searchText)")
         }

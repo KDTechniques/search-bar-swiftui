@@ -33,7 +33,7 @@ public struct SearchBarView: View {
     // MARK: - BODY
     public var body: some View {
         HStack(spacing: 0) {
-            SearchIconView()
+            SearchIconView(isFocused: $isFocused)
             TextFieldView(text: $searchBarText, isFocused: $isFocused, placeholder: placeholder)
         }
         .padding(.horizontal, 6)
