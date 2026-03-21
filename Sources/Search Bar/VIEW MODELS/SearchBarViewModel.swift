@@ -68,8 +68,7 @@ final class SearchBarViewModel {
         let condition1: Bool = isFocused
         let condition2: Bool = searchText.isEmpty
         
-        condition1 ? setSearchBarAnimation(true) : setSearchBarAnimation(!condition2)
-        
+        return !condition1 && condition2 ? searchBarAnimation(false) : searchBarAnimation(true)
     }
     
     // MARK: - PRIVATE FUNCTIONS
