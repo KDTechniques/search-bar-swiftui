@@ -47,5 +47,6 @@ extension CancelButtonView {
         isFocused = false
         text = ""
         vm.setSearchText("")
+        vm.handleAnimatedCancelButtonOnSearchTextNFocusChange(isFocused: false)
     }
 }
