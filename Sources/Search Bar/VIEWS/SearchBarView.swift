@@ -157,9 +157,7 @@ fileprivate extension View {
         case .iOS26:
             if #available(iOS 26.0, *) {
                 self
-                    .glassEffect(.regular, in: .capsule)
-                
-                    .shadow(color: .black.opacity(0.01), radius: 10)
+                    .glassEffect(.regular.tint(SearchBarValues.containerColor), in: .capsule)
             } else {
                 self
             }

@@ -16,14 +16,15 @@ struct TrailingFadeEffectView: View {
     
     // MARK: - BODY
     var body: some View {
-        let color: Color = .white//vm.colors.backgroundColor
+        let color: Color = SearchBarValues.containerColor//vm.colors.backgroundColor
         
         color
-            .frame(width: 35)
-            .blur(radius: 1)
+            .frame(width: 35, height: 20)
+//            .blur(radius: 1)
             .background(alignment: .trailing) { TrailingBackground_1(color: color) }
             .background(alignment: .trailing) { TrailingBackground_2(color: color) }
             .opacity(isFocused ? 0 : 1)
+            .offset(x: -10)
     }
 }
 
@@ -43,7 +44,7 @@ fileprivate struct TrailingBackground_1: View {
     var body: some View {
         color
             .frame(width: 62)
-            .blur(radius: 10)
+//            .blur(radius: 10)
     }
 }
 

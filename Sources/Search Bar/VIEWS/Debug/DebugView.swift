@@ -59,8 +59,11 @@ public struct DebugView: View {
     }()
     
     NavigationStack {
-        DebugView(iOSVersion: iOSVersion)
-            .padding(.bottom, 500)
+        Color.debug.ignoresSafeArea()
+            .overlay {
+                DebugView(iOSVersion: iOSVersion)
+                    .padding(.top, 500)
+            }
     }
     .searchable(text: $searchText, placement: .toolbar, prompt: .init("Debug Search"))
 }

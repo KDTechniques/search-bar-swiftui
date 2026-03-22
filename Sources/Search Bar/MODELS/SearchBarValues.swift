@@ -5,7 +5,7 @@
 //  Created by Mr. Kavinda Dilshan on 2026-03-22.
 //
 
-import Foundation
+import SwiftUI
 
 struct SearchBarValues {
     static func containerHeight(_ iOSVersion: iOSVersions) -> CGFloat {
@@ -49,4 +49,7 @@ struct SearchBarValues {
             return Self.magnifierLeadingPadding(.iOS26)
         }
     }
+    
+    /// finalize the folling property later
+    static let containerColor: Color = .red.opacity(0.1)
 }
