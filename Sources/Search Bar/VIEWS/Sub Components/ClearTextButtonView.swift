@@ -44,8 +44,7 @@ struct ClearTextButtonView: View {
     @Previewable @FocusState var isFocused: Bool
     
     ClearTextButtonView(text: .constant(""), isFocused: $isFocused)
-        .environment(SearchBarViewModel(context: .sheet))
-        .environment(\.iOSVersion, .random())
+        .previewModifier(context: .navigation)
 }
 
 // MARK: - EXTENSIONS
@@ -54,14 +53,5 @@ extension ClearTextButtonView {
         text = ""
         vm.setSearchText("")
         isFocused = true
-    }
-}
-
-
-struct TestingPreferenceKey: PreferenceKey {
-    static let defaultValue: CGFloat = 0
-    
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
     }
 }

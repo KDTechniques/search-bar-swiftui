@@ -10,21 +10,21 @@ import SwiftUI
 struct TrailingFadeEffectView: View {
     // MARK: INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
+    @Environment(\.iOSVersion) private var iOSVersion
     
     // MARK: - ASSIGNED PROPERTIES
     @FocusState.Binding var isFocused: Bool
     
     // MARK: - BODY
     var body: some View {
-        let color: Color = SearchBarValues.containerColor//vm.colors.backgroundColor
+        let color: Color = vm.colors.backgroundColor
         
         color
-            .frame(width: 35, height: 20)
-//            .blur(radius: 1)
-            .background(alignment: .trailing) { TrailingBackground_1(color: color) }
-            .background(alignment: .trailing) { TrailingBackground_2(color: color) }
+            .frame(width: 35)
+            .blur(radius: 1)
+            .background(alignment: .trailing) { blurColor(color) }
+            .background(alignment: .trailing) { plainColor(color) }
             .opacity(isFocused ? 0 : 1)
-            .offset(x: -10)
     }
 }
 
@@ -33,25 +33,18 @@ struct TrailingFadeEffectView: View {
     @Previewable @FocusState var isFocused: Bool
     
     TrailingFadeEffectView(isFocused: $isFocused)
-        .environment(SearchBarViewModel(context: .sheet))
+        .previewModifier(context: .navigation)
 }
 
-// MARK: - SUBVIEWS
-
-fileprivate struct TrailingBackground_1: View {
-    let color: Color
-    
-    var body: some View {
+// MARK: - EXTENSIONS
+extension TrailingFadeEffectView {
+    private func blurColor(_ color: Color) -> some View {
         color
-            .frame(width: 62)
-//            .blur(radius: 10)
+            .frame(width: SearchBarValues.blurEffectBlurColorWidth)
+            .blur(radius: SearchBarValues.blurEffectBlurColorRadius(iOSVersion))
     }
-}
-
-fileprivate struct TrailingBackground_2: View {
-    let color: Color
     
-    var body: some View {
-        color.frame(width: 30)
+    private func plainColor(_ color: Color) -> some View {
+        color.frame(width: SearchBarValues.blurEffectPlainColorWidth(iOSVersion))
     }
 }

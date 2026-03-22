@@ -26,6 +26,5 @@ struct CircularProgressView: View {
 // MARK: - PREVIEWS
 #Preview("CircularProgressView") {
     CircularProgressView()
-        .previewModifier(context: .sheet)
-        .environment(\.iOSVersion, .random())
+        .previewModifier(context: .navigation)
 }

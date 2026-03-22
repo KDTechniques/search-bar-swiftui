@@ -38,11 +38,11 @@ struct DismissButtonView: View {
                     .scaledToFit()
                     .frame(width: xMarkSize, height: xMarkSize)
                     .font(.title2)
-                    .foregroundStyle(.black)
+                    .tint(.primary)
                     .frame(width: circleSize, height: circleSize)
             }
         }
-        .glassEffectViewModifier(iOSVersion)
+        .glassEffectViewModifier(iOSVersion, vm: vm)
         .offset(x: vm.cancelButtonOffsetX)
         .opacity(vm.cancelButtonOpacity)
     }
@@ -51,12 +51,15 @@ struct DismissButtonView: View {
 // MARK: - PREVIEWS
 #Preview("DismissButtonView") {
     @Previewable @FocusState var isFocused: Bool
-    let vm: SearchBarViewModel = .init(context: .sheet)
+    let vm: SearchBarViewModel = .init(context: .sheet, iOSVersion: .random())
     
-    DismissButtonView(text: .constant(""), isFocused: $isFocused)
-        .onAppear { vm.setCancelButtonOpacity(1.0) }
-        .environment(vm)
-        .environment(\.iOSVersion, .random())
+    NavigationStack {
+        DismissButtonView(text: .constant(""), isFocused: $isFocused)
+            .onAppear { vm.setCancelButtonOpacity(1.0) }
+            .environment(vm)
+            .previewModifier(context: .navigation)
+    }
+    .searchable(text: .constant("Search"))
 }
 
 // MARK: - EXTENSIONS
@@ -71,14 +74,14 @@ extension DismissButtonView {
 
 fileprivate extension View {
     @ViewBuilder
-    func glassEffectViewModifier(_ iOSVersion: iOSVersions) -> some View {
+    func glassEffectViewModifier(_ iOSVersion: iOSVersions, vm: SearchBarViewModel) -> some View {
         switch iOSVersion {
         case .iOS17:
             self
         case .iOS26:
             if #available(iOS 26.0, *) {
                 self
-                    .glassEffect(.regular, in: .circle)
+                    .glassEffect(.regular.tint(vm.colors.backgroundColor).interactive(), in: .circle)
             } else {
                 self
             }

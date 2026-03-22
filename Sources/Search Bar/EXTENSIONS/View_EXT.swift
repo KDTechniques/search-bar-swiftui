@@ -10,6 +10,7 @@ import SwiftUI
 extension View {
     func previewModifier(context: ContextTypes) -> some View {
         self
-            .environment(SearchBarViewModel(context: context))
+            .environment(SearchBarViewModel(context: context, iOSVersion: .random()))
+            .environment(\.iOSVersion, .random())
     }
 }

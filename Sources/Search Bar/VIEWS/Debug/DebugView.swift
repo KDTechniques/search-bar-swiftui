@@ -28,7 +28,7 @@ public struct DebugView: View {
                 iOSVersion: iOSVersion,
                 searchBarText: $searchText,
                 placeholder: "Debug Search",
-                context: .sheet,
+                context: .navigation,
                 isSearching: isSearching
             )
             .focused($isFocused)
@@ -37,11 +37,12 @@ public struct DebugView: View {
                 isSearching.toggle()
             }
             .buttonStyle(.borderedProminent)
-            .controlSize(.extraLarge)
+            .controlSize(.large)
             
-            Text("isFocused: \(isFocused.description)")
-            
-            Text("Search Text: \(searchText)")
+            VStack(alignment: .leading) {
+                Text("isFocused: \(isFocused.description)")
+                Text("Search Text: \(searchText)")
+            }
         }
     }
 }
@@ -59,11 +60,13 @@ public struct DebugView: View {
     }()
     
     NavigationStack {
-        Color.debug.ignoresSafeArea()
-            .overlay {
-                DebugView(iOSVersion: iOSVersion)
-                    .padding(.top, 500)
-            }
+        DebugView(iOSVersion: iOSVersion)
+            .padding(.horizontal, 5)
+            .padding(.bottom, 500)
     }
-    .searchable(text: $searchText, placement: .toolbar, prompt: .init("Debug Search"))
+    .searchable(
+        text: $searchText,
+        placement: .navigationBarDrawer,
+        prompt: .init("Debug Search")
+    )
 }

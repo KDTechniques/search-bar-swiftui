@@ -51,8 +51,7 @@ struct TextFieldView: View {
         isFocused: $isFocused,
         placeholder: text.isEmpty ? "Search" : ""
     )
-    .previewModifier(context: .sheet)
-    .environment(\.iOSVersion, .random())
+    .previewModifier(context: .navigation)
 }
 
 // MARK: - EXTENSIONS

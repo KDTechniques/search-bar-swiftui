@@ -26,7 +26,7 @@ public struct SearchBarView: View {
         context: ContextTypes,
         isSearching: Bool = false
     ) {
-        _vm = .init(initialValue: .init(context: context))
+        _vm = .init(initialValue: .init(context: context, iOSVersion: iOSVersion))
         _searchBarText = searchBarText
         self.iOSVersion = iOSVersion
         self.placeholder = placeholder
@@ -42,12 +42,12 @@ public struct SearchBarView: View {
         .padding(.leading, SearchBarValues.magnifierLeadingPadding(iOSVersion))
         .padding(.trailing, SearchBarValues.TextFieldTrailingPadding(iOSVersion))
         .frame(height: SearchBarValues.containerHeight(iOSVersion))
-        .glassEffectViewModifier(iOSVersion)
-        .overlay(alignment: .trailing) { trailingOverlay_1 } // <--- /// Trailing Fade Effect
-        .overlay(alignment: .trailing) { trailingOverlay_2 } /// Dismiss Button
+        .overlay(alignment: .trailing) { trailingOverlay_1 } /// Trailing Fade Effect
+        .overlay(alignment: .trailing) { trailingOverlay_2 } /// Clear Text Button / Circular Progress
+        .glassEffectViewModifier(iOSVersion, vm: vm)
         .containerBackgroundWithClipShape(iOSVersion, vm: vm)
         .padding(.horizontal)
-        .overlay(alignment: .trailing) { trailingOverlay_3 } /// Clear Button / Circular Progress
+        .overlay(alignment: .trailing) { trailingOverlay_3 } /// Dismiss Button
         .padding(.trailing, vm.searchBarTrailingPadding)
         .environment(vm)
         .environment(\.iOSVersion, iOSVersion)
@@ -150,14 +150,15 @@ extension SearchBarView {
 
 fileprivate extension View {
     @ViewBuilder
-    func glassEffectViewModifier(_ iOSVersion: iOSVersions) -> some View {
+    func glassEffectViewModifier(_ iOSVersion: iOSVersions, vm: SearchBarViewModel) -> some View {
         switch iOSVersion {
         case .iOS17:
             self
         case .iOS26:
             if #available(iOS 26.0, *) {
                 self
-                    .glassEffect(.regular.tint(SearchBarValues.containerColor), in: .capsule)
+                    .clipShape(.capsule)
+                    .glassEffect(.regular.tint(vm.colors.backgroundColor).interactive())
             } else {
                 self
             }

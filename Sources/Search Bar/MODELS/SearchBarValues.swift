@@ -14,7 +14,7 @@ struct SearchBarValues {
             return 36
             
         case .iOS26:
-            return 49
+            return 44
         }
     }
     
@@ -26,7 +26,7 @@ struct SearchBarValues {
             return 8
             
         case .iOS26:
-            return 20
+            return 14
         }
     }
     
@@ -46,10 +46,31 @@ struct SearchBarValues {
             return 7
             
         case .iOS26:
-            return Self.magnifierLeadingPadding(.iOS26)
+            return 15
         }
     }
     
-    /// finalize the folling property later
-    static let containerColor: Color = .red.opacity(0.1)
+    static func blurEffectPlainColorWidth(_ iOSVersion: iOSVersions) -> CGFloat {
+        switch iOSVersion {
+        case .iOS17:
+            return 30
+            
+        case .iOS26:
+            return 45
+        }
+    }
+    
+    static let blurEffectBlurColorWidth: CGFloat = 62
+    
+    static func blurEffectBlurColorRadius(_ iOSVersion: iOSVersions) -> CGFloat {
+        switch iOSVersion {
+        case .iOS17:
+            return 10
+            
+        case .iOS26:
+            return 8
+        }
+    }
+    
+    static let dismissButtonOffsetX: CGFloat = 53
 }
