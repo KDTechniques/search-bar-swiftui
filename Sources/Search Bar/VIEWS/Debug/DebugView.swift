@@ -20,6 +20,7 @@ public struct DebugView: View {
     public var body: some View {
         VStack(spacing: 20) {
             SearchBarView(
+                iOSVersion: .iOS26,
                 searchBarText: $searchText,
                 placeholder: "Debug Search",
                 context: .sheet,

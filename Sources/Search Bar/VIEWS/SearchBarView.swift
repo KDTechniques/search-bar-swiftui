@@ -10,6 +10,7 @@ import SwiftUI
 public struct SearchBarView: View {
     // MARK: - INJECTED PROPERTIES
     @Binding var searchBarText: String
+    private let iOSVersion: iOSVersions
     private let placeholder: String
     private let isSearching: Bool
     
@@ -19,6 +20,7 @@ public struct SearchBarView: View {
     
     // MARK: - INITIALIZER
     public init(
+        iOSVersion: iOSVersions,
         searchBarText: Binding<String>,
         placeholder: String,
         context: ContextTypes,
@@ -26,6 +28,7 @@ public struct SearchBarView: View {
     ) {
         _vm = .init(initialValue: .init(context: context))
         _searchBarText = searchBarText
+        self.iOSVersion = iOSVersion
         self.placeholder = placeholder
         self.isSearching = isSearching
     }
@@ -48,6 +51,7 @@ public struct SearchBarView: View {
         .environment(vm)
         .onChange(of: searchBarText) { onSearchTextChange($1) }
         .onChange(of: isSearching) { vm.setIsSearching($1) }
+        .environment(\.iOSVersion, iOSVersion)
     }
 }
 
@@ -60,6 +64,7 @@ public struct SearchBarView: View {
             NavigationStack {
                 VStack {
                     SearchBarView(
+                        iOSVersion: .random(),
                         searchBarText: $text,
                         placeholder: "Search",
                         context: .sheet
@@ -80,6 +85,7 @@ public struct SearchBarView: View {
     NavigationStack {
         VStack {
             SearchBarView(
+                iOSVersion: .random(),
                 searchBarText: $text,
                 placeholder: "Search",
                 context: .navigation
@@ -98,6 +104,7 @@ public struct SearchBarView: View {
     NavigationStack {
         VStack {
             SearchBarView(
+                iOSVersion: .random(),
                 searchBarText: $text,
                 placeholder: "Search",
                 context: .custom(.init(
