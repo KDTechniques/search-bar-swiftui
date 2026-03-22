@@ -10,6 +10,7 @@ import SwiftUI
 public struct SearchBarView: View {
     // MARK: - INJECTED PROPERTIES
     @Binding var searchBarText: String
+    private let iOSVersion: iOSVersions
     private let placeholder: String
     private let isSearching: Bool
     
@@ -19,13 +20,15 @@ public struct SearchBarView: View {
     
     // MARK: - INITIALIZER
     public init(
+        iOSVersion: iOSVersions,
         searchBarText: Binding<String>,
         placeholder: String,
         context: ContextTypes,
         isSearching: Bool = false
     ) {
-        _vm = .init(initialValue: .init(context: context))
+        _vm = .init(initialValue: .init(context: context, iOSVersion: iOSVersion))
         _searchBarText = searchBarText
+        self.iOSVersion = iOSVersion
         self.placeholder = placeholder
         self.isSearching = isSearching
     }
@@ -36,16 +39,18 @@ public struct SearchBarView: View {
             SearchIconView(isFocused: $isFocused)
             TextFieldView(text: $searchBarText, isFocused: $isFocused, placeholder: placeholder)
         }
-        .padding(.horizontal, 6)
-        .padding(.vertical, 7)
-        .overlay(alignment: .trailing) { trailingOverlay_1 }
-        .overlay(alignment: .trailing) { trailingOverlay_2 }
-        .background(vm.colors.backgroundColor)
-        .clipShape(.rect(cornerRadius: 10))
+        .padding(.leading, SearchBarValues.magnifierLeadingPadding(iOSVersion))
+        .padding(.trailing, SearchBarValues.TextFieldTrailingPadding(iOSVersion))
+        .frame(height: SearchBarValues.containerHeight(iOSVersion))
+        .overlay(alignment: .trailing) { trailingOverlay_1 } /// Trailing Fade Effect
+        .overlay(alignment: .trailing) { trailingOverlay_2 } /// Clear Text Button / Circular Progress
+        .glassEffectViewModifier(iOSVersion, vm: vm)
+        .containerBackgroundWithClipShape(iOSVersion, vm: vm)
         .padding(.horizontal)
-        .overlay(alignment: .trailing) { trailingOverlay_3 }
+        .overlay(alignment: .trailing) { trailingOverlay_3 } /// Dismiss Button
         .padding(.trailing, vm.searchBarTrailingPadding)
         .environment(vm)
+        .environment(\.iOSVersion, iOSVersion)
         .onChange(of: searchBarText) { onSearchTextChange($1) }
         .onChange(of: isSearching) { vm.setIsSearching($1) }
     }
@@ -60,6 +65,7 @@ public struct SearchBarView: View {
             NavigationStack {
                 VStack {
                     SearchBarView(
+                        iOSVersion: .random(),
                         searchBarText: $text,
                         placeholder: "Search",
                         context: .sheet
@@ -80,6 +86,7 @@ public struct SearchBarView: View {
     NavigationStack {
         VStack {
             SearchBarView(
+                iOSVersion: .random(),
                 searchBarText: $text,
                 placeholder: "Search",
                 context: .navigation
@@ -98,6 +105,7 @@ public struct SearchBarView: View {
     NavigationStack {
         VStack {
             SearchBarView(
+                iOSVersion: .random(),
                 searchBarText: $text,
                 placeholder: "Search",
                 context: .custom(.init(
@@ -125,17 +133,48 @@ extension SearchBarView {
     @ViewBuilder
     private var trailingOverlay_2: some View {
         if vm.showXButton() {
-            XButtonView(text: $searchBarText, isFocused: $isFocused)
+            ClearTextButtonView(text: $searchBarText, isFocused: $isFocused)
         } else if vm.showCircularProgress() {
             CircularProgressView()
         }
     }
     
     private var trailingOverlay_3: some View {
-        CancelButtonView(text: $searchBarText, isFocused: $isFocused)
+        DismissButtonView(text: $searchBarText, isFocused: $isFocused)
     }
     
     private func onSearchTextChange(_ value: String) {
         vm.setSearchText(value)
+    }
+}
+
+fileprivate extension View {
+    @ViewBuilder
+    func glassEffectViewModifier(_ iOSVersion: iOSVersions, vm: SearchBarViewModel) -> some View {
+        switch iOSVersion {
+        case .iOS17:
+            self
+        case .iOS26:
+            if #available(iOS 26.0, *) {
+                self
+                    .clipShape(.capsule)
+                    .glassEffect(.regular.tint(vm.colors.backgroundColor).interactive())
+            } else {
+                self
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func containerBackgroundWithClipShape(_ iOSVersion: iOSVersions, vm: SearchBarViewModel) -> some View {
+        switch iOSVersion {
+        case .iOS17:
+            self
+                .background(vm.colors.backgroundColor)
+                .clipShape(.rect(cornerRadius: 10))
+            
+        case .iOS26:
+            self
+        }
     }
 }

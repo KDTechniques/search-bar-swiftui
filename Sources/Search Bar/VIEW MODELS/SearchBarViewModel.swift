@@ -13,10 +13,11 @@ import Combine
 final class SearchBarViewModel {
     // MARK: - INJECTED PROPERTIES
     var colors: ColorContextModel
+    let iOSVersion: iOSVersions
     
     // MARK: - ASSIGNED PROPERTIES
     private(set) var searchBarTrailingPadding: CGFloat = 0
-    private(set) var cancelButtonOffsetX: CGFloat = 53
+    private(set) var cancelButtonOffsetX: CGFloat = SearchBarValues.dismissButtonOffsetX
     private(set) var cancelButtonOpacity: CGFloat = 0
     
     private(set) var searchBarAnimation: Bool? { didSet { searchBarAnimation$ = searchBarAnimation } }
@@ -27,8 +28,9 @@ final class SearchBarViewModel {
     private(set) var searchText: String = ""
     
     // MARK: - INITIALIZER
-    init(context: ContextTypes) {
+    init(context: ContextTypes, iOSVersion: iOSVersions) {
         self.colors = Utilities.setColors(context: context)
+        self.iOSVersion = iOSVersion
         searchBarAnimationSubscriber()
     }
     
@@ -81,8 +83,25 @@ final class SearchBarViewModel {
     
     private func showAnimatedCancelButton() {
         withAnimation(.smooth(duration: 0.3)) {
-            searchBarTrailingPadding = 65
-            cancelButtonOffsetX = 48
+            searchBarTrailingPadding = {
+                switch iOSVersion {
+                case .iOS17:
+                    return 65
+                    
+                case .iOS26:
+                    return 50
+                }
+            }()
+            
+            cancelButtonOffsetX = {
+                switch iOSVersion {
+                case .iOS17:
+                    return 48
+                case .iOS26:
+                    return 36
+                }
+            }()
+            
             cancelButtonOpacity = 1
         }
     }
@@ -90,7 +109,7 @@ final class SearchBarViewModel {
     private func hideAnimatedCancelButton() {
         withAnimation(.smooth(duration: 0.3)) {
             searchBarTrailingPadding = 0
-            cancelButtonOffsetX = 53
+            cancelButtonOffsetX = SearchBarValues.dismissButtonOffsetX
             cancelButtonOpacity = 0
         }
     }
