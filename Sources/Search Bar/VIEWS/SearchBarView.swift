@@ -39,19 +39,20 @@ public struct SearchBarView: View {
             SearchIconView(isFocused: $isFocused)
             TextFieldView(text: $searchBarText, isFocused: $isFocused, placeholder: placeholder)
         }
-        .padding(.horizontal, 6)
-        .padding(.vertical, 7)
-        .overlay(alignment: .trailing) { trailingOverlay_1 }
-        .overlay(alignment: .trailing) { trailingOverlay_2 }
-        .background(vm.colors.backgroundColor)
-        .clipShape(.rect(cornerRadius: 10))
+        .padding(.leading, SearchBarValues.magnifierLeadingPadding(iOSVersion))
+        .padding(.trailing, SearchBarValues.TextFieldTrailingPadding(iOSVersion))
+        .frame(height: SearchBarValues.containerHeight(iOSVersion))
+        .glassEffectViewModifier(iOSVersion)
+        .overlay(alignment: .trailing) { trailingOverlay_1 } // <--- /// Trailing Fade Effect
+        .overlay(alignment: .trailing) { trailingOverlay_2 } /// Dismiss Button
+        .containerBackgroundWithClipShape(iOSVersion, vm: vm)
         .padding(.horizontal)
-        .overlay(alignment: .trailing) { trailingOverlay_3 }
+        .overlay(alignment: .trailing) { trailingOverlay_3 } /// Clear Button / Circular Progress
         .padding(.trailing, vm.searchBarTrailingPadding)
         .environment(vm)
+        .environment(\.iOSVersion, iOSVersion)
         .onChange(of: searchBarText) { onSearchTextChange($1) }
         .onChange(of: isSearching) { vm.setIsSearching($1) }
-        .environment(\.iOSVersion, iOSVersion)
     }
 }
 
@@ -132,17 +133,49 @@ extension SearchBarView {
     @ViewBuilder
     private var trailingOverlay_2: some View {
         if vm.showXButton() {
-            XButtonView(text: $searchBarText, isFocused: $isFocused)
+            ClearTextButtonView(text: $searchBarText, isFocused: $isFocused)
         } else if vm.showCircularProgress() {
             CircularProgressView()
         }
     }
     
     private var trailingOverlay_3: some View {
-        CancelButtonView(text: $searchBarText, isFocused: $isFocused)
+        DismissButtonView(text: $searchBarText, isFocused: $isFocused)
     }
     
     private func onSearchTextChange(_ value: String) {
         vm.setSearchText(value)
+    }
+}
+
+fileprivate extension View {
+    @ViewBuilder
+    func glassEffectViewModifier(_ iOSVersion: iOSVersions) -> some View {
+        switch iOSVersion {
+        case .iOS17:
+            self
+        case .iOS26:
+            if #available(iOS 26.0, *) {
+                self
+                    .glassEffect(.regular, in: .capsule)
+                
+                    .shadow(color: .black.opacity(0.01), radius: 10)
+            } else {
+                self
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func containerBackgroundWithClipShape(_ iOSVersion: iOSVersions, vm: SearchBarViewModel) -> some View {
+        switch iOSVersion {
+        case .iOS17:
+            self
+                .background(vm.colors.backgroundColor)
+                .clipShape(.rect(cornerRadius: 10))
+            
+        case .iOS26:
+            self
+        }
     }
 }

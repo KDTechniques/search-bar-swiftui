@@ -16,7 +16,7 @@ struct TrailingFadeEffectView: View {
     
     // MARK: - BODY
     var body: some View {
-        let color: Color = vm.colors.backgroundColor
+        let color: Color = .white//vm.colors.backgroundColor
         
         color
             .frame(width: 35)

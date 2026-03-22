@@ -1,5 +1,5 @@
 //
-//  CancelButtonView.swift
+//  DismissButtonView.swift
 //  search-bar-swiftui
 //
 //  Created by Mr. Kavinda Dilshan on 2024-07-31.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CancelButtonView: View {
+struct DismissButtonView: View {
     // MARK: - INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
     @Environment(\.iOSVersion) private var iOSVersion
@@ -20,9 +20,6 @@ struct CancelButtonView: View {
         _isFocused = isFocused
     }
     
-    let xMarkSize: CGFloat = 18
-    let circleSize: CGFloat = 50
-    
     // MARK: - BODY
     var body: some View {
         Button(role: .cancel) {
@@ -33,6 +30,9 @@ struct CancelButtonView: View {
                 Text("Cancel")
                 
             case .iOS26:
+                let xMarkSize: CGFloat = SearchBarValues.horizontalIconsSize
+                let circleSize: CGFloat = SearchBarValues.containerHeight(iOSVersion)
+                
                 Image(systemName: "xmark")
                     .resizable()
                     .scaledToFit()
@@ -42,25 +42,25 @@ struct CancelButtonView: View {
                     .frame(width: circleSize, height: circleSize)
             }
         }
-        .glassEffect(iOSVersion)
+        .glassEffectViewModifier(iOSVersion)
         .offset(x: vm.cancelButtonOffsetX)
         .opacity(vm.cancelButtonOpacity)
     }
 }
 
 // MARK: - PREVIEWS
-#Preview("CancelButtonView") {
+#Preview("DismissButtonView") {
     @Previewable @FocusState var isFocused: Bool
     let vm: SearchBarViewModel = .init(context: .sheet)
     
-    CancelButtonView(text: .constant(""), isFocused: $isFocused)
+    DismissButtonView(text: .constant(""), isFocused: $isFocused)
         .onAppear { vm.setCancelButtonOpacity(1.0) }
         .environment(vm)
         .environment(\.iOSVersion, .random())
 }
 
 // MARK: - EXTENSIONS
-extension CancelButtonView {
+extension DismissButtonView {
     private func handleTap() {
         isFocused = false
         text = ""
@@ -71,7 +71,7 @@ extension CancelButtonView {
 
 fileprivate extension View {
     @ViewBuilder
-    func glassEffect(_ iOSVersion: iOSVersions) -> some View {
+    func glassEffectViewModifier(_ iOSVersion: iOSVersions) -> some View {
         switch iOSVersion {
         case .iOS17:
             self

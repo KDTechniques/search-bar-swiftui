@@ -8,19 +8,24 @@
 import SwiftUI
 
 public struct DebugView: View {
+    // MARK: - INJECTED PROPERTIES
+    let iOSVersion: iOSVersions
+    
     // MARK: - ASSIGNED PROPERTIES
     @State private var searchText: String = ""
     @State private var isSearching: Bool = false
     @FocusState private var isFocused: Bool
     
     // MARK: - INITIALIZER
-    public init() { }
+    public init(iOSVersion: iOSVersions) {
+        self.iOSVersion = iOSVersion
+    }
     
     // MARK: - BODY
     public var body: some View {
         VStack(spacing: 20) {
             SearchBarView(
-                iOSVersion: .iOS26,
+                iOSVersion: iOSVersion,
                 searchBarText: $searchText,
                 placeholder: "Debug Search",
                 context: .sheet,
@@ -43,5 +48,19 @@ public struct DebugView: View {
 
 // MARK: - PREVIEWS
 #Preview("DebugView") {
-    DebugView()
+    @Previewable @State var searchText: String = ""
+    
+    let iOSVersion: iOSVersions = {
+        if #available(iOS 26.0, *) {
+            return .iOS26
+        } else {
+            return .iOS17
+        }
+    }()
+    
+    NavigationStack {
+        DebugView(iOSVersion: iOSVersion)
+            .padding(.bottom, 500)
+    }
+    .searchable(text: $searchText, placement: .toolbar, prompt: .init("Debug Search"))
 }

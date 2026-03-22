@@ -10,6 +10,7 @@ import SwiftUI
 struct TextFieldView: View {
     // MARK: - INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
+    @Environment(\.iOSVersion) private var iOSVersion
     @Binding var text: String
     @FocusState.Binding var isFocused: Bool
     let placeholder: String
@@ -35,7 +36,7 @@ struct TextFieldView: View {
         .focused($isFocused)
         .foregroundStyle(vm.colors.textColor)
         .overlay(alignment: .leading) { PlaceholderTextView(placeholder) }
-        .padding(.leading, 5)
+        .leadingPaddingViewModifier(iOSVersion)
         .padding(.trailing, isFocused ? 28 : 0)
     }
 }
@@ -51,6 +52,7 @@ struct TextFieldView: View {
         placeholder: text.isEmpty ? "Search" : ""
     )
     .previewModifier(context: .sheet)
+    .environment(\.iOSVersion, .random())
 }
 
 // MARK: - EXTENSIONS
@@ -70,5 +72,19 @@ extension TextFieldView {
                 #selector(UIResponder.resignFirstResponder),
                 to: nil, from: nil, for: nil
             )
+    }
+}
+
+fileprivate extension View {
+    func leadingPaddingViewModifier(_ iOSVersion: iOSVersions) -> some View {
+        switch iOSVersion {
+        case .iOS17:
+            self
+                .padding(.leading, 7)
+            
+        case .iOS26:
+            self
+                .padding(.leading, 9)
+        }
     }
 }
