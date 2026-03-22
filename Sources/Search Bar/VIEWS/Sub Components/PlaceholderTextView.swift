@@ -10,6 +10,7 @@ import SwiftUI
 struct PlaceholderTextView: View {
     // MARK: - INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
+    @Environment(\.iOSVersion) private var iOSVersion
     let placeholder: String
     
     // MARK: - INITIALIZER
@@ -29,6 +30,5 @@ struct PlaceholderTextView: View {
 //MARK: - PREVIEWS
 #Preview("PlaceholderTextView") {
     PlaceholderTextView("Search")
-        .environment(SearchBarViewModel(context: .sheet))
+        .previewModifier(context: .navigation)
 }
-

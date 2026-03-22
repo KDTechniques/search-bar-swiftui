@@ -1,5 +1,5 @@
 //
-//  XButtonView.swift
+//  ClearTextButtonView.swift
 //  search-bar-swiftui
 //
 //  Created by Mr. Kavinda Dilshan on 2024-07-31.
@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct XButtonView: View {
+struct ClearTextButtonView: View {
     // MARK: - INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
+    @Environment(\.iOSVersion) private var iOSVersion
     @Binding var text: String
     @FocusState.Binding var isFocused: Bool
     
@@ -24,25 +25,30 @@ struct XButtonView: View {
         Button {
             handleTap()
         } label: {
+            let iconSize: CGFloat = SearchBarValues.horizontalIconsSize
+            
             Image(systemName: "xmark.circle.fill")
                 .symbolRenderingMode(.monochrome)
+                .resizable()
+                .scaledToFit()
+                .frame(width: iconSize, height: iconSize)
                 .foregroundStyle(vm.colors.searchIconTextColor)
-                .padding(.trailing, 6)
+                .padding(.trailing, SearchBarValues.clearTextButtonTrailingPadding(iOSVersion))
                 .animation(.none, value: vm.searchText)
         }
     }
 }
 
 // MARK: - PREVIEWS
-#Preview("XButtonView") {
+#Preview("ClearTextButtonView") {
     @Previewable @FocusState var isFocused: Bool
     
-    XButtonView(text: .constant(""), isFocused: $isFocused)
-        .environment(SearchBarViewModel(context: .sheet))
+    ClearTextButtonView(text: .constant(""), isFocused: $isFocused)
+        .previewModifier(context: .navigation)
 }
 
 // MARK: - EXTENSIONS
-extension XButtonView {
+extension ClearTextButtonView {
     private func handleTap() {
         text = ""
         vm.setSearchText("")
