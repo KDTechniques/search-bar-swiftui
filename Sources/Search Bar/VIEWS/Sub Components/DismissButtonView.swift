@@ -11,6 +11,7 @@ struct DismissButtonView: View {
     // MARK: - INJECTED PROPERTIES
     @Environment(SearchBarViewModel.self) private var vm
     @Environment(\.iOSVersion) private var iOSVersion
+    @Environment(\.colorScheme) private var colorScheme
     @Binding var text: String
     @FocusState.Binding var isFocused: Bool
     
@@ -42,7 +43,7 @@ struct DismissButtonView: View {
                     .frame(width: circleSize, height: circleSize)
             }
         }
-        .glassEffectViewModifier(iOSVersion, vm: vm)
+        .glassEffectViewModifier(iOSVersion, vm: vm, colorScheme: colorScheme)
         .offset(x: vm.cancelButtonOffsetX)
         .opacity(vm.cancelButtonOpacity)
     }
@@ -74,14 +75,16 @@ extension DismissButtonView {
 
 fileprivate extension View {
     @ViewBuilder
-    func glassEffectViewModifier(_ iOSVersion: iOSVersions, vm: SearchBarViewModel) -> some View {
+    func glassEffectViewModifier(_ iOSVersion: iOSVersions, vm: SearchBarViewModel, colorScheme: ColorScheme) -> some View {
         switch iOSVersion {
         case .iOS17:
             self
         case .iOS26:
             if #available(iOS 26.0, *) {
+                let glass: Glass = colorScheme == .dark ? .regular : .clear
+                
                 self
-                    .glassEffect(.regular.tint(vm.colors.backgroundColor).interactive(), in: .circle)
+                    .glassEffect(glass.tint(vm.colors.backgroundColor).interactive(), in: .circle)
             } else {
                 self
             }

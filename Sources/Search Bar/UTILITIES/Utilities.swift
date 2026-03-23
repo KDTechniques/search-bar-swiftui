@@ -9,13 +9,13 @@ import Foundation
 
 @MainActor
 struct Utilities {
-    static func setColors(context: ContextTypes) -> ColorContextModel {
+    static func setColors(context: ContextTypes, iOSVersion: iOSVersions) -> ColorContextModel {
         switch context {
         case .sheet:
-            return ColorContextTypes.sheet
+            return ColorContextTypes.sheet(iOSVersion)
             
         case .navigation:
-            return ColorContextTypes.navigation
+            return ColorContextTypes.navigation(iOSVersion)
             
         case .custom(let colors):
             return colors

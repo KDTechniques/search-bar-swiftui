@@ -32,7 +32,7 @@ struct ClearTextButtonView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: iconSize, height: iconSize)
-                .foregroundStyle(vm.colors.searchIconTextColor)
+                .foregroundStyle(vm.colors.magnifierIconColor)
                 .padding(.trailing, SearchBarValues.clearTextButtonTrailingPadding(iOSVersion))
                 .animation(.none, value: vm.searchText)
         }

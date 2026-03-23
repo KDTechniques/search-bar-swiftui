@@ -9,12 +9,42 @@ import SwiftUI
 
 extension Color {
     // For Sheets
-    static let backgroundColor_Sheet: Color = .init("BackgroundColor_Sheet", bundle: .module)
-    static let searchIconsTextColor_Sheet: Color = .init("SearchIconsTextColor_Sheet", bundle: .module)
+    static func backgroundColor_Sheet(_ iOSVersion: iOSVersions) -> Color {
+        switch iOSVersion {
+        case .iOS17:
+            return .init("BackgroundColor_Sheet_iOS17", bundle: .module)
+        case .iOS26:
+            return .init("BackgroundColor_Sheet_iOS26", bundle: .module)
+        }
+    }
+    
+    static func ForegroundColor_Sheet(_ iOSVersion: iOSVersions) -> Color {
+        switch iOSVersion {
+        case .iOS17:
+            return .init("ForegroundColor_Sheet_iOS17", bundle: .module)
+        case .iOS26:
+            return .init("ForegroundColor_Sheet_iOS26", bundle: .module)
+        }
+    }
     
     // For Navigation
-    static let backgroundColor_Navigation: Color = .init("BackgroundColor_Navigation", bundle: .module)
-    static let searchIconsTextColor_Navigation: Color = .init("SearchIconsTextColor_Navigation", bundle: .module)
+    static func backgroundColor_Navigation(_ iOSVersion: iOSVersions) -> Color {
+        switch iOSVersion {
+        case .iOS17:
+            return .init("BackgroundColor_Navigation_iOS17", bundle: .module)
+        case .iOS26:
+            return .init("BackgroundColor_Navigation_iOS26", bundle: .module)
+        }
+    }
+    
+    static func ForegroundColor_Navigation(_ iOSVersion: iOSVersions) -> Color {
+        switch iOSVersion {
+        case .iOS17:
+            return .init("ForegroundColor_Navigation_iOS17", bundle: .module)
+        case .iOS26:
+            return .init("ForegroundColor_Navigation_iOS26", bundle: .module)
+        }
+    }
     
     static var debug: Self {
         let red = Double.random(in: 0...1)

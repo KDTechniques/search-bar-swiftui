@@ -29,7 +29,7 @@ final class SearchBarViewModel {
     
     // MARK: - INITIALIZER
     init(context: ContextTypes, iOSVersion: iOSVersions) {
-        self.colors = Utilities.setColors(context: context)
+        self.colors = Utilities.setColors(context: context, iOSVersion: iOSVersion)
         self.iOSVersion = iOSVersion
         searchBarAnimationSubscriber()
     }
