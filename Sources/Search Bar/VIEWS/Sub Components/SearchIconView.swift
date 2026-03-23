@@ -19,7 +19,7 @@ struct SearchIconView: View {
             .resizable()
             .scaledToFit()
             .frame(height: SearchBarValues.horizontalIconsSize)
-            .foregroundColor(vm.colors.searchIconTextColor)
+            .foregroundColor(vm.colors.magnifierIconColor)
             .onTapGesture { isFocused = true }
     }
 }

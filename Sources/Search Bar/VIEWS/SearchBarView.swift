@@ -9,6 +9,7 @@ import SwiftUI
 
 public struct SearchBarView: View {
     // MARK: - INJECTED PROPERTIES
+    @Environment(\.colorScheme) private var colorScheme
     @Binding var searchBarText: String
     private let iOSVersion: iOSVersions
     private let placeholder: String
@@ -44,7 +45,7 @@ public struct SearchBarView: View {
         .frame(height: SearchBarValues.containerHeight(iOSVersion))
         .overlay(alignment: .trailing) { trailingOverlay_1 } /// Trailing Fade Effect
         .overlay(alignment: .trailing) { trailingOverlay_2 } /// Clear Text Button / Circular Progress
-        .glassEffectViewModifier(iOSVersion, vm: vm)
+        .glassEffectViewModifier(iOSVersion, vm: vm, colorScheme: colorScheme)
         .containerBackgroundWithClipShape(iOSVersion, vm: vm)
         .padding(.horizontal)
         .overlay(alignment: .trailing) { trailingOverlay_3 } /// Dismiss Button
@@ -110,9 +111,10 @@ public struct SearchBarView: View {
                 placeholder: "Search",
                 context: .custom(.init(
                     backgroundColor: .yellow,
-                    searchIconTextColor: .blue,
+                    magnifierIconColor: .blue,
                     placeholderTextColor: .green,
-                    textColor: .red
+                    textColor: .red,
+                    clearTextButtonColor: .purple
                 ))
             )
             .tint(.purple)
@@ -150,15 +152,17 @@ extension SearchBarView {
 
 fileprivate extension View {
     @ViewBuilder
-    func glassEffectViewModifier(_ iOSVersion: iOSVersions, vm: SearchBarViewModel) -> some View {
+    func glassEffectViewModifier(_ iOSVersion: iOSVersions, vm: SearchBarViewModel, colorScheme: ColorScheme) -> some View {
         switch iOSVersion {
         case .iOS17:
             self
         case .iOS26:
             if #available(iOS 26.0, *) {
+                let glass: Glass = colorScheme == .dark ? .regular : .clear
+                
                 self
                     .clipShape(.capsule)
-                    .glassEffect(.regular.tint(vm.colors.backgroundColor).interactive())
+                    .glassEffect(glass.tint(vm.colors.backgroundColor).interactive())
             } else {
                 self
             }
